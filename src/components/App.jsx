@@ -1,8 +1,11 @@
 import React from 'react'
+import ReelPlayer from './ReelPlayer'
 
 const App = () => {
   return (
-    <div>App</div>
+    <div className='flex items-center justify-center h-screen'>
+      <ReelPlayer />
+    </div>
   )
 }
 
