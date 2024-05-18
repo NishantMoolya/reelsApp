@@ -1,12 +1,10 @@
 import React from 'react'
 import ReelPlayer from './ReelPlayer'
-import TrialPlayer from './TrialPlayer'
 
 const App = () => {
   return (
-    <div className='flex items-center justify-center h-screen'>
+    <div className='flex items-center justify-center h-screen bg-neutral-900'>
       <ReelPlayer />
-      {/* <TrialPlayer /> */}
     </div>
   )
 }

@@ -5,6 +5,7 @@
     position: absolute;
     bottom: 0;
     z-index: 20;
+    cursor: pointer;
 }
 
 .video_timeline::before {
@@ -13,23 +14,34 @@
     left: 0;
     top: 0;
     bottom: 0;
-    right: calc(100% - var(--preview-position) * 100%);
+    right: calc(100% - var(--progress-position) * 100%);
     background-color: red;
-    /* display: none; */
 }
 
-
-/*.video_timeline::after {
+.video_timeline::after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
-    right: calc(100% - var(--progress-position) * 100%);
-    background-color: red;
+    right: calc(100% - var(--preview-position) * 100%);
+    background-color: blue;
 }
 
-.video_timeline .video_progress_btn {
+.preview_container{
+    position: absolute;
+    bottom: 0.8rem;
+    padding: 4px;
+    transform: translate(50%);
+    right: calc(100% - var(--preview-container-position) * 100%);
+    display: none;
+}
+
+.video_timeline:hover .preview_container{
+    display: block;
+}
+
+/*.video_timeline .video_progress_btn {
     --scale: 2;
     position: absolute;
     transform: translateX(-50%) scale(var(--scale));

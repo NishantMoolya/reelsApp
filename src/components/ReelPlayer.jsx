@@ -4,7 +4,6 @@ import Video from './Video'
 const ReelPlayer = () => {
   const videoContainerRef = useRef();
   const [activeVideo, setActiveVideo] = useState(0);
-  const [startFromBegin, setStartFromBegin] = useState(0);
   
   const handleScroll = (e) => {
     const videos = videoContainerRef.current.children;
@@ -18,7 +17,6 @@ const ReelPlayer = () => {
     }
     if (newActiveIndex !== activeVideo) {
       setActiveVideo(newActiveIndex);
-      setStartFromBegin(0);
     }
   }
 
@@ -39,9 +37,9 @@ const ReelPlayer = () => {
 }];
 
   return (
-    <div ref={videoContainerRef} className='border shadow w-[315px] h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900'>
+    <div ref={videoContainerRef} className='shadow h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900' style={{ aspectRatio:"9/16"}}>
       {
-        videos.map((video, ind) => <Video key={ind} video={video} active={activeVideo === ind} startFromBegin={startFromBegin} />)
+        videos.map((video, ind) => <Video key={ind} video={video} active={activeVideo === ind} />)
       }
     </div>
   )

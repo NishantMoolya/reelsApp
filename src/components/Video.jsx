@@ -1,13 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react'
 import '../styles/video.css'
 
-const Video = ({ video,active,startFromBegin }) => {
+const Video = ({ video,active }) => {
     const [play, setPlay] = useState(true);
-    //const [progress, setProgress] = useState(0);
+    const [timestamp, setTimestamp] = useState(0);
     const [openDropDown, setOpenDropDown] = useState(false);
-    const videoRef = useRef();
-    const timeLineRef = useRef();
+    const videoRef = useRef(null);
+    const timeLineRef = useRef(null);
+    const previewRef = useRef(null);
 
+    const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
+        minimumIntegerDigits: 2,
+      });
+    const formatDuration = (time) => {
+        const seconds = Math.floor(time % 60);
+        const minutes = Math.floor(time / 60) % 60;
+        const hours = Math.floor(time / 3600);
+        if (hours === 0) {
+          return `${minutes}:${leadingZeroFormatter.format(seconds)}`;
+        } else {
+          return `${hours}:${leadingZeroFormatter.format(
+            minutes
+          )}:${leadingZeroFormatter.format(seconds)}`;
+        }
+      }
+      
     const playVideo = () => {
         if(play){
             videoRef.current.pause();
@@ -20,7 +37,32 @@ const Video = ({ video,active,startFromBegin }) => {
 
     const handleTimeLine = (e) => {
         const progress = (videoRef.current.currentTime/ videoRef.current.duration);
-        timeLineRef.current.style.setProperty("--preview-position", progress);
+        timeLineRef.current.style.setProperty("--progress-position", progress);
+        //setTimestamp(formatDuration(videoRef.current.currentTime));
+    }
+
+    const handleTimeLinePreview = (e) => {
+        const rect = timeLineRef.current.getBoundingClientRect();
+        const percent = Math.min(Math.max(0,e.clientX - rect.x),rect.width)/rect.width;
+
+        const newTime = percent * videoRef.current.duration;  //setting the current preview time
+        setTimestamp(formatDuration(newTime));
+
+        let previewContainer = Math.min(Math.max(percent,0.08),0.92);  //min value = 0.08 max value = 0.92
+        previewRef.current.style.setProperty("--preview-container-position", previewContainer); //preview-container display
+        timeLineRef.current.style.setProperty("--preview-position", percent); //preview-pointer display
+    }
+
+    const handleSeek = (e) => {
+        const rect = timeLineRef.current.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const newTime = (clickX / rect.width) * videoRef.current.duration;
+        videoRef.current.currentTime = newTime;
+    }
+
+    const handleMouseSeek = (e) => {
+        timeLineRef.current.style.setProperty("--preview-position", 0);
+        handleSeek(e);
     }
 
     const handleDropDown = () => {
@@ -55,7 +97,9 @@ useEffect(() => {
                 </ul>}
             </span>
             <span  className='text-2xl absolute right-3 top-1/2 z-20'><i className="fa-regular fa-heart"></i></span>
-            <div className='video_timeline' ref={timeLineRef}></div>
+            <div className='video_timeline' ref={timeLineRef} onClick={handleSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
+                <div ref={previewRef} className='preview_container'><p className='text-center font-semibold'>{timestamp}</p></div>
+            </div>
         </div>
     </div>
   )
