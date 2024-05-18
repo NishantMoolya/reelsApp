@@ -98,7 +98,8 @@ useEffect(() => {
             </span>
             <span  className='text-2xl absolute right-3 top-1/2 z-20'><i className="fa-regular fa-heart"></i></span>
             <div className='video_timeline' ref={timeLineRef} onClick={handleSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
-                <div ref={previewRef} className='preview_container'><p className='text-center font-semibold'>{timestamp}</p></div>
+                <div ref={previewRef} className='preview_container'><p className='text-center font-semibold text-lg'>{timestamp}</p></div>
+                <span className='preview_pointer'></span>
             </div>
         </div>
     </div>

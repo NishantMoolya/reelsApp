@@ -19,3 +19,12 @@ code {
 ::-webkit-scrollbar{
   display: none;
 }
+
+.reelplayer_frame{
+  width: auto;
+}
+@media screen and (max-width:400px){
+  .reelplayer_frame{
+    width: 100%;
+  }
+}

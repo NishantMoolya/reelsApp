@@ -6,13 +6,17 @@ const ReelPlayer = () => {
   const [activeVideo, setActiveVideo] = useState(0);
   
   const handleScroll = (e) => {
+    //simple logic - just detect how far the present video is from the center of viewport
+
     const videos = videoContainerRef.current.children;
     let newActiveIndex = activeVideo;
+    let closestDis = Infinity;
     for (let index = 0; index < videos.length; index++) {
       const rect = videos[index].getBoundingClientRect();
-      if(rect.top >= 0 && rect.bottom <= window.innerHeight){
+      const disFromCenter = Math.abs(rect.top + rect.height/2 - window.innerHeight/2);
+      if (disFromCenter < closestDis) {
+        closestDis = disFromCenter;
         newActiveIndex = index;
-        break;
       }
     }
     if (newActiveIndex !== activeVideo) {
@@ -37,7 +41,7 @@ const ReelPlayer = () => {
 }];
 
   return (
-    <div ref={videoContainerRef} className='shadow h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900' style={{ aspectRatio:"9/16"}}>
+    <div ref={videoContainerRef} className='reelplayer_frame shadow h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900 ' style={{ aspectRatio:"9/16"}}>
       {
         videos.map((video, ind) => <Video key={ind} video={video} active={activeVideo === ind} />)
       }

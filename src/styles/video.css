@@ -41,6 +41,23 @@
     display: block;
 }
 
+.preview_pointer{
+    background-color: blue;
+    border-radius: 50%;
+    height: 4px;
+    width: 4px;
+    transform: scale(3);
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: calc(100% - var(--preview-position) * 100%);
+}
+
+.video_timeline:hover .preview_pointer{
+    display: block;
+}
+
 /*.video_timeline .video_progress_btn {
     --scale: 2;
     position: absolute;
