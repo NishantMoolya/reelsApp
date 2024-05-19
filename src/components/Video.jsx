@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import '../styles/video.css'
+import { formatDuration } from '../utilities/formatter';
 
 const Video = ({ video,active }) => {
     const [play, setPlay] = useState(true);
@@ -8,22 +9,6 @@ const Video = ({ video,active }) => {
     const videoRef = useRef(null);
     const timeLineRef = useRef(null);
     const previewRef = useRef(null);
-
-    const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
-        minimumIntegerDigits: 2,
-      });
-    const formatDuration = (time) => {
-        const seconds = Math.floor(time % 60);
-        const minutes = Math.floor(time / 60) % 60;
-        const hours = Math.floor(time / 3600);
-        if (hours === 0) {
-          return `${minutes}:${leadingZeroFormatter.format(seconds)}`;
-        } else {
-          return `${hours}:${leadingZeroFormatter.format(
-            minutes
-          )}:${leadingZeroFormatter.format(seconds)}`;
-        }
-      }
       
     const playVideo = () => {
         if(play){
