@@ -5,8 +5,8 @@ import UploadReel from './UploadReel'
 const App = () => {
   return (
     <div className='flex items-center justify-center h-screen bg-neutral-900'>
-      {/* <ReelPlayer /> */}
-      <UploadReel />
+      <ReelPlayer />
+      {/* <UploadReel /> */}
     </div>
   )
 }
