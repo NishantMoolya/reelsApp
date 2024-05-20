@@ -19,20 +19,6 @@ const App = () => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-    async function hello(){
-      const { data: profile, error: fetchError } = await supabase
-      .from('profiles')
-      .select('videos')
-      .eq('id', "7b836b74-c064-483b-ae4a-550b2c7ac72d")
-      .single();
-      const updatedVideos = profile.videos ? [...profile.videos, { videoId:12345 }] : [{ videoId:12345 }];
-      const { data, error } = await supabase
-      .from('profiles')
-      .update({ videos: updatedVideos })
-      .eq('id', "7b836b74-c064-483b-ae4a-550b2c7ac72d");
-      console.log(data);
-    }
-    //hello();
     return () => subscription.unsubscribe();
   }, []);
 
@@ -45,8 +31,6 @@ const App = () => {
           <Route path='profile' element={<UserProfile />} />
         </Route>
       </Routes>
-      {/* <ReelPlayer /> */}
-      {/* <UploadReel /> */}
     </div>
   )
 }

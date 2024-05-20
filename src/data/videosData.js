@@ -1,4 +1,4 @@
-const videos = [{
+const videosList = [{
   url: "https://vz-e75f48af-b1c.b-cdn.net/aa0598aa-05f6-4885-b42d-af6e28147939/play_480p.mp4"
 },
 {
@@ -10,4 +10,4 @@ const videos = [{
   url: "https://vz-e75f48af-b1c.b-cdn.net/a1c12289-ea21-4b8c-9bc2-247a3b38dc8d/play_720p.mp4"
 }];
 
-export { videos };
+export { videosList };
