@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-//import { uploadVideo } from '../api/video_api';
 import { isResolution } from '../utilities/uploadHelper';
 import { supabase } from '../services/config/supabase';
-import { uploadVideo } from '../services/api/video/uploader';
+import useUpload from '../hooks/useUpload';
 
 const UploadReel = () => {
     const inputFileRef = useRef(null);
@@ -10,6 +9,9 @@ const UploadReel = () => {
     const [videoTitle, setVideoTitle] = useState("");
     const [canUpload, setCanUpload] = useState(false);
     const [userId, setUserId] = useState(null);
+
+    const { status,uploader } = useUpload();
+
     const selectFile = (e) => {
         if(inputFileRef.current){
             inputFileRef.current.click();
@@ -22,7 +24,7 @@ const UploadReel = () => {
         console.log(file);
         if(file){
             setVideoSrc(URL.createObjectURL(file));
-            console.log(userId);
+            //console.log(userId);
         }
     } catch (err) {
             console.log(`error in uploading file:${err}`);
@@ -41,11 +43,16 @@ const UploadReel = () => {
         }
     }
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (videoSrc !== null && videoTitle !== "") {
             const file = inputFileRef.current.files[0];
             if (userId) {   
-                uploadVideo(videoTitle.trim(),file,userId);
+                setCanUpload(false);
+                //console.log("hello");
+                await uploader(videoTitle.trim(),file,userId);
+                setCanUpload(true);
+                setVideoTitle("");
+                setVideoSrc(null);
             }
         }else{
             alert("Fill neccessary fields");
@@ -72,7 +79,7 @@ const UploadReel = () => {
         <div onClick={selectFile} className='flex flex-col gap-2 justify-center items-center h-1/2 p-2 border-dotted border-black border-2 rounded'>
             <input ref={inputFileRef} type="file" name="video" accept='video/mp4' onChange={handleFile} hidden />
             {videoSrc && <video className='flex-1' src={videoSrc} onLoadedMetadata={handleRestrictions} style={{ aspectRatio:"9/16",maxHeight:'80%' }}></video>}
-            <button className='capitalize text-base font-semibold self-center bg-blue-500 text-white rounded py-1 px-3 border-none'>{videoSrc?"change video":"select video"}</button>
+            <button className='capitalize text-base font-semibold self-center bg-blue-500 text-white rounded py-1 px-3 border-none'>{videoSrc?status:"select video"}</button>
         </div>
         <div className='flex flex-col gap-2 p-2'>
             <p className='text-lg font-semibold capitalize text-slate-500'>specifications</p>

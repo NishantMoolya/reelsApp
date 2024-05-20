@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/video.css'
 import useVideo from '../hooks/useVideo';
+import { NavLink } from 'react-router-dom';
 
 const Video = ({ video, active }) => {
     
@@ -31,9 +32,9 @@ const Video = ({ video, active }) => {
                 <span className='absolute right-4 top-4 z-20 flex flex-col' onClick={handleDropDown}>
                     {openDropDown ? <i className="fa-solid fa-xmark text-2xl self-end"></i> : <i className="fa-solid fa-ellipsis-vertical text-2xl self-end"></i>}
                     {openDropDown && <ul className='flex flex-col gap-2 py-2 px-4 bg-white shadow rounded-sm text-neutral-500 capitalize divide-y-2'>
-                        <li>my profile</li>
-                        <li>upload</li>
-                        <li>description</li>
+                        <li><NavLink to={'/profile'}>my profile</NavLink></li>
+                        <li><NavLink to={'/upload'}>upload</NavLink></li>
+                        <li><NavLink to={'/'}>description</NavLink></li>
                     </ul>}
                 </span>
                 <span className='text-2xl absolute right-3 top-1/2 z-20'><i className="fa-regular fa-heart"></i></span>
