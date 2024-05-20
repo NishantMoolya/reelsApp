@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react'
-import { uploadVideo } from '../api/video_api';
+import React, { useEffect, useRef, useState } from 'react'
+//import { uploadVideo } from '../api/video_api';
 import { isResolution } from '../utilities/uploadHelper';
+import { supabase } from '../services/config/supabase';
+import { uploadVideo } from '../services/api/video/uploader';
 
 const UploadReel = () => {
     const inputFileRef = useRef(null);
     const [videoSrc, setVideoSrc] = useState(null);
     const [videoTitle, setVideoTitle] = useState("");
     const [canUpload, setCanUpload] = useState(false);
+    const [userId, setUserId] = useState(null);
     const selectFile = (e) => {
         if(inputFileRef.current){
             inputFileRef.current.click();
@@ -19,6 +22,7 @@ const UploadReel = () => {
         console.log(file);
         if(file){
             setVideoSrc(URL.createObjectURL(file));
+            console.log(userId);
         }
     } catch (err) {
             console.log(`error in uploading file:${err}`);
@@ -40,12 +44,28 @@ const UploadReel = () => {
     const handleUpload = () => {
         if (videoSrc !== null && videoTitle !== "") {
             const file = inputFileRef.current.files[0];
-            uploadVideo(videoTitle.trim(),file);
+            if (userId) {   
+                uploadVideo(videoTitle.trim(),file,userId);
+            }
         }else{
             alert("Fill neccessary fields");
         }
     }
 
+    useEffect(() => {
+        const getUserProfile = async () => {
+            try {
+            const res = await supabase.auth.getUser();
+            const { user } = res.data;
+            console.log(user);
+            return user.id;
+          } catch (err) {
+              console.log(`an error in getting user profile:${err}`);
+              return null;
+          }
+          }
+          getUserProfile().then(id => setUserId(id));
+    },[]);
 
   return (
     <div className='reelplayer_frame h-[560px] flex flex-col gap-2 overflow-scroll scroll-smooth bg-white p-2' style={{ aspectRatio:"9/16"}}>
