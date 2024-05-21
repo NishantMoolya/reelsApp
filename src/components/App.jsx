@@ -19,6 +19,12 @@ const App = () => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+    async function hello(videoData) {
+      const { data, error } = await supabase.from('videos').insert([videoData]).select();
+      console.log(data, error);
+    }
+    
+    //hello({videoid:videoId,title,likes,availableresolutions,videolibraryid,thumbnailfilename,dateuploaded});
     return () => subscription.unsubscribe();
   }, []);
 

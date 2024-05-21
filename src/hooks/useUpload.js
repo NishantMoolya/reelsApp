@@ -3,6 +3,7 @@ import { createVideoObject } from '../services/api/video/controllers/createVideo
 import { uploadVideo } from '../services/api/video/controllers/uploadVideo';
 import { updateUserVideosList } from '../services/api/video/controllers/updateUserVideosList';
 import { useState } from 'react';
+import { addVideo } from '../services/api/video/controllers/addVideo';
 
 const useUpload = () => {
     const [status, setStatus] = useState('Change video');
@@ -13,16 +14,27 @@ const useUpload = () => {
         const binaryData = await fileToBinary(videoData);
         if(binaryData !== false){
             setStatus('creating');
-            const videoId = await createVideoObject(title,1000);
-            if(videoId !== false){
+            let videoMetadata = await createVideoObject(title,1000);
+            if(videoMetadata !== false){
+                const videoId = videoMetadata.guid;
                 setStatus('uploading');
                 const uploadData = await uploadVideo(videoId,minResolution,binaryData);
                 if(uploadData !== false && uploadData?.statusCode === 200){
                     setStatus('updating');
                     const userData = await updateUserVideosList(userId,videoId);
                     if(userData){
-                         console.log('user updated process completed');
-                         setStatus('completed');
+                         console.log('user updated');
+                         const { dateUploaded,guid,thumbnailFileName,title,videoLibraryId} = videoMetadata;
+                         const videoObj = { videoid:guid,videolibraryid:videoLibraryId,title:title,availableresolutions:'720',thumbnailfilename:thumbnailFileName,likes:0,dateuploaded:dateUploaded };
+                         setStatus('adding video');
+                         const addedVideo = await addVideo(videoObj);
+                         if (addedVideo) {
+                            console.log('added video process completed');
+                            setStatus('completed');
+                         }else{
+                            console.log('adding video failed');
+                            setStatus('adding video failed');
+                         }
                         }
                     else {
                         console.log('user not updated');

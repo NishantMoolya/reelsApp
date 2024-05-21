@@ -38,7 +38,7 @@ const ReelPlayer = () => {
     getVideoList().then(videoList => {
       console.log(videoList);
       let videoUrlRaw = [];
-      videoList.items.forEach(obj => {
+      videoList?.items.forEach(obj => {
         const nums = findResolutions(obj);
         if (nums.length) {
           const big = maxResolution(nums);

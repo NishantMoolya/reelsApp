@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 const Video = ({ video, active }) => {
     
     const { videoRef,previewRef,timeLineRef,previewTimestamp,playVideo,handleTimeLineProgress,handleMouseSeek,handleClickSeek,handleTimeLinePreview } = useVideo();
+    const [liked, setLiked] = useState(true);
     
     useEffect(() => {
         const reel = videoRef.current;
@@ -20,6 +21,11 @@ const Video = ({ video, active }) => {
     const [openDropDown, setOpenDropDown] = useState(false);
     const handleDropDown = () => {
         setOpenDropDown(prev => !prev);
+    }
+
+    const handleLikes = async () => {
+        setLiked(prev => !prev);
+        updateLikes(liked,video?.videoid);
     }
 
     return (
@@ -37,7 +43,7 @@ const Video = ({ video, active }) => {
                         <li><NavLink to={'/'}>description</NavLink></li>
                     </ul>}
                 </span>
-                <span className='text-2xl absolute right-3 top-1/2 z-20'><i className="fa-regular fa-heart"></i></span>
+                <span className={`text-2xl absolute right-3 top-1/2 z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i class="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}</span>
                 <div className='video_timeline' ref={timeLineRef} onClick={handleClickSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
                     <div ref={previewRef} className='preview_container'><p className='text-center font-semibold text-lg'>{previewTimestamp}</p></div>
                     <span className='preview_pointer'></span>

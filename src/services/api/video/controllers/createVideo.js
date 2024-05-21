@@ -16,7 +16,8 @@ const createVideoObject = async (title,thumbnailTime) => {
         const data = await response.json();
         console.log(data);
         if (response.status === 200) {
-            return data.guid;
+            const { guid,videoLibraryId,title,dateUploaded,thumbnailFileName } = data;
+            return { guid,videoLibraryId,title,dateUploaded,thumbnailFileName };
         } else {
             throw new Error("Cannot create video object");
         }
