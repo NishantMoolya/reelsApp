@@ -8,6 +8,19 @@ import UserProfile from './UserProfile'
 
 const App = () => {
   const [session, setSession] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  const getUserProfile = async () => {
+    try {
+    const res = await supabase.auth.getUser();
+    const { user } = res.data;
+    console.log(user);
+    return user.id;
+  } catch (err) {
+      console.log(`an error in getting user profile:${err}`);
+      return null;
+  }
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -19,12 +32,7 @@ const App = () => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-    async function hello(videoData) {
-      const { data, error } = await supabase.from('videos').insert([videoData]).select();
-      console.log(data, error);
-    }
-    
-    //hello({videoid:videoId,title,likes,availableresolutions,videolibraryid,thumbnailfilename,dateuploaded});
+    getUserProfile().then(id => setUserId(id));
     return () => subscription.unsubscribe();
   }, []);
 
@@ -32,7 +40,7 @@ const App = () => {
     <div className='flex items-center justify-center h-screen bg-neutral-900'>
       <Routes>
         <Route path='/' element={<UserAuth session={session} />}>
-          <Route index element={<ReelPlayer />} />
+          <Route index element={<ReelPlayer userid={userId} />} />
           <Route path='upload' element={<UploadReel />} />
           <Route path='profile' element={<UserProfile />} />
         </Route>

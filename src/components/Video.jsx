@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import '../styles/video.css'
 import useVideo from '../hooks/useVideo';
 import { NavLink } from 'react-router-dom';
+import { updateLikes } from '../services/api/video/controllers/updateLikes';
 
-const Video = ({ video, active }) => {
+const Video = ({ video, active, videoid, userid }) => {
     
     const { videoRef,previewRef,timeLineRef,previewTimestamp,playVideo,handleTimeLineProgress,handleMouseSeek,handleClickSeek,handleTimeLinePreview } = useVideo();
-    const [liked, setLiked] = useState(true);
+    const [liked, setLiked] = useState(false);
     
     useEffect(() => {
         const reel = videoRef.current;
@@ -25,7 +26,7 @@ const Video = ({ video, active }) => {
 
     const handleLikes = async () => {
         setLiked(prev => !prev);
-        updateLikes(liked,video?.videoid);
+        updateLikes(!liked,videoid,userid);
     }
 
     return (
@@ -43,7 +44,7 @@ const Video = ({ video, active }) => {
                         <li><NavLink to={'/'}>description</NavLink></li>
                     </ul>}
                 </span>
-                <span className={`text-2xl absolute right-3 top-1/2 z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i class="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}</span>
+                <span className={`text-2xl absolute right-3 top-1/2 z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i className="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}</span>
                 <div className='video_timeline' ref={timeLineRef} onClick={handleClickSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
                     <div ref={previewRef} className='preview_container'><p className='text-center font-semibold text-lg'>{previewTimestamp}</p></div>
                     <span className='preview_pointer'></span>
