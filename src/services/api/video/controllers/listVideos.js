@@ -13,7 +13,7 @@ const getVideoList = async () => {
     const start = 0;
     const end = 9;
     try {  
-        const { data: videos, error } = await supabase.from('videos').select('videoid,availableresolutions').range(start, end);
+        const { data: videos, error } = await supabase.from('videos').select('videoid,availableresolutions,likes,username').range(start, end);
         //const response = await fetch(listVideoUrl, options)
         //const data = await response.json();
         //console.log(videos);

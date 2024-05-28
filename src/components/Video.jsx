@@ -3,11 +3,13 @@ import '../styles/video.css'
 import useVideo from '../hooks/useVideo';
 import { NavLink } from 'react-router-dom';
 import { updateLikes } from '../services/api/video/controllers/updateLikes';
+import userAvatar from '../assets/person1.jpg';
 
-const Video = ({ video, active, videoid, userid, videosLikedList }) => {
+const Video = ({ video, active, videoid, userid, likes, username, videosLikedList }) => {
     
     const { videoRef,previewRef,timeLineRef,previewTimestamp,playVideo,handleTimeLineProgress,handleMouseSeek,handleClickSeek,handleTimeLinePreview } = useVideo();
     const [liked, setLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(likes);
     
     useEffect(() => {
         const reel = videoRef.current;
@@ -33,6 +35,7 @@ const Video = ({ video, active, videoid, userid, videosLikedList }) => {
     }
 
     const handleLikes = async () => {
+        liked?setLikeCount(prev => prev-1):setLikeCount(prev => prev+1);
         setLiked(prev => !prev);
         updateLikes(!liked,videoid,userid);
     }
@@ -52,7 +55,11 @@ const Video = ({ video, active, videoid, userid, videosLikedList }) => {
                         <li><NavLink to={'/'}>description</NavLink></li>
                     </ul>}
                 </span>
-                <span className={`text-2xl absolute right-3 top-1/2 flex flex-col items-center z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i className="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}<p className='text-base font-semibold text-white'>12</p></span>
+                <span className={`text-2xl absolute right-3 top-1/2 flex flex-col items-center z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i className="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}<p className='text-base font-semibold text-white'>{likeCount < 1000?likeCount:`${likeCount/1000}k`}</p></span>
+                <div className='absolute z-20 bottom-10 left-4 flex items-center gap-2'>
+                    <img src={userAvatar} alt="user avatar" className='h-10 w-10 rounded-full object-cover' />
+                    <p className='capitalize text-base font-semibold'>{username}</p>
+                </div>
                 <div className='video_timeline' ref={timeLineRef} onClick={handleClickSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
                     <div ref={previewRef} className='preview_container'><p className='text-center font-semibold text-lg'>{previewTimestamp}</p></div>
                     <span className='preview_pointer'></span>

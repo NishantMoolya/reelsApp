@@ -8,7 +8,7 @@ const UploadReel = () => {
     const [videoSrc, setVideoSrc] = useState(null);
     const [videoTitle, setVideoTitle] = useState("");
     const [canUpload, setCanUpload] = useState(false);
-    const [userId, setUserId] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
 
     const { status,uploader } = useUpload();
 
@@ -46,10 +46,10 @@ const UploadReel = () => {
     const handleUpload = async () => {
         if (videoSrc !== null && videoTitle !== "") {
             const file = inputFileRef.current.files[0];
-            if (userId) {   
+            if (userInfo) {   
                 setCanUpload(false);
                 //console.log("hello");
-                await uploader(videoTitle.trim(),file,userId);
+                await uploader(videoTitle.trim(),file,userInfo.id,userInfo.name);
                 setCanUpload(true);
                 setVideoTitle("");
                 setVideoSrc(null);
@@ -65,13 +65,13 @@ const UploadReel = () => {
             const res = await supabase.auth.getUser();
             const { user } = res.data;
             console.log(user);
-            return user.id;
+            return {id:user.id,name:user.user_metadata.name};
           } catch (err) {
               console.log(`an error in getting user profile:${err}`);
               return null;
           }
           }
-          getUserProfile().then(id => setUserId(id));
+          getUserProfile().then(userData => setUserInfo(userData));
     },[]);
 
   return (

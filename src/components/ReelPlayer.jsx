@@ -45,7 +45,9 @@ const ReelPlayer = ({ userid }) => {
         //const nums = findResolutions(obj);
         const resolution = obj.availableresolutions;
         const guid = obj.videoid;
-        videoUrlRaw.push({guid,resolution});
+        const likes = obj.likes;
+        const username = obj.username;
+        videoUrlRaw.push({guid,resolution,likes,username});
         //setVideoUrlRaw(prev => ([...prev,{guid,resolution}]));
         //if (nums.length) {
           //const resolution = maxResolution(nums);
@@ -68,7 +70,7 @@ const ReelPlayer = ({ userid }) => {
   return (
     <div ref={videoContainerRef} className='reelplayer_frame shadow h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900 ' style={{ aspectRatio:"9/16"}}>
       {
-        videosList.map((video, ind) => <Video key={videoIds[ind].guid} videoid={videoIds[ind].guid} video={video} userid={userid} videosLikedList={videosLikedList} active={activeVideo === ind} />)
+        videosList.map((video, ind) => <Video key={videoIds[ind].guid} videoid={videoIds[ind].guid} video={video} userid={userid} likes={videoIds[ind].likes} username={videoIds[ind].username} videosLikedList={videosLikedList} active={activeVideo === ind} />)
       }
     </div>
   )

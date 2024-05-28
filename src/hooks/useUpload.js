@@ -7,7 +7,7 @@ import { addVideo } from '../services/api/video/controllers/addVideo';
 
 const useUpload = () => {
     const [status, setStatus] = useState('Change video');
-    const uploader = async (title,videoData,userId) => {
+    const uploader = async (title,videoData,userId,username) => {
         setStatus('processing');
         const minResolution = '720p';
 
@@ -25,7 +25,7 @@ const useUpload = () => {
                     if(userData){
                          console.log('user updated');
                          const { dateUploaded,guid,thumbnailFileName,title,videoLibraryId} = videoMetadata;
-                         const videoObj = { videoid:guid,videolibraryid:videoLibraryId,title:title,availableresolutions:'720',thumbnailfilename:thumbnailFileName,likes:0,dateuploaded:dateUploaded };
+                         const videoObj = { videoid:guid,videolibraryid:videoLibraryId,title:title,availableresolutions:'720',thumbnailfilename:thumbnailFileName,likes:0,dateuploaded:dateUploaded,username:username };
                          setStatus('adding video');
                          const addedVideo = await addVideo(videoObj);
                          if (addedVideo) {
