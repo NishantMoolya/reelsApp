@@ -4,7 +4,7 @@ import useVideo from '../hooks/useVideo';
 import { NavLink } from 'react-router-dom';
 import { updateLikes } from '../services/api/video/controllers/updateLikes';
 
-const Video = ({ video, active, videoid, userid }) => {
+const Video = ({ video, active, videoid, userid, videosLikedList }) => {
     
     const { videoRef,previewRef,timeLineRef,previewTimestamp,playVideo,handleTimeLineProgress,handleMouseSeek,handleClickSeek,handleTimeLinePreview } = useVideo();
     const [liked, setLiked] = useState(false);
@@ -18,6 +18,14 @@ const Video = ({ video, active, videoid, userid }) => {
             reel.pause();
         }
     }, [active]);
+    
+    useEffect(() => {
+        if (videosLikedList.includes(videoid)) { 
+            setLiked(true);
+        }else{
+            setLiked(false);
+        }
+    }, [videosLikedList]);
     
     const [openDropDown, setOpenDropDown] = useState(false);
     const handleDropDown = () => {
@@ -44,7 +52,7 @@ const Video = ({ video, active, videoid, userid }) => {
                         <li><NavLink to={'/'}>description</NavLink></li>
                     </ul>}
                 </span>
-                <span className={`text-2xl absolute right-3 top-1/2 z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i className="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}</span>
+                <span className={`text-2xl absolute right-3 top-1/2 flex flex-col items-center z-20 ${liked?'text-red-500':null}`} onClick={handleLikes}>{liked?<i className="fa-solid fa-heart"></i>:<i className="fa-regular fa-heart"></i>}<p className='text-base font-semibold text-white'>12</p></span>
                 <div className='video_timeline' ref={timeLineRef} onClick={handleClickSeek} onMouseMove={handleTimeLinePreview} onMouseLeave={handleMouseSeek}>
                     <div ref={previewRef} className='preview_container'><p className='text-center font-semibold text-lg'>{previewTimestamp}</p></div>
                     <span className='preview_pointer'></span>

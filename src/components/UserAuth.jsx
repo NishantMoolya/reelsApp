@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom'
 const UserAuth = ({ session }) => {
   return (
     <>
-      {!session ? <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme='dark' providers={['google', 'facebook']} />
+      {!session ? <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} theme='dark' providers={['google']} />
         : <Outlet />}
     </>
   )

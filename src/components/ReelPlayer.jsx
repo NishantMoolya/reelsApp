@@ -3,12 +3,14 @@ import Video from './Video'
 //import { videosList } from '../data/videosData';
 import { getVideoList } from '../services/api/video/controllers/listVideos';
 import { findResolutions, maxResolution, videoUrlCreator } from '../utilities/resolutionExtractor';
+import { userLikedVideos } from '../services/api/user/controllers/userLikedVideos';
 
 const ReelPlayer = ({ userid }) => {
   const videoContainerRef = useRef();
   const [activeVideo, setActiveVideo] = useState(0);
   const [videosList, setVideosList] = useState([]);
   const [videoIds, setVideoIds] = useState([]);
+  const [videosLikedList, setVideosLikedList] = useState([]);
   
   const handleScroll = (e) => {
     //simple logic - just detect how far the present video is from the center of viewport
@@ -56,11 +58,17 @@ const ReelPlayer = ({ userid }) => {
       setVideoIds(videoUrlRaw);
     });
   },[]);
-
+  
+  useEffect(() => {
+    userLikedVideos(userid).then(likedvideos => {
+      console.log(likedvideos); 
+      if (likedvideos) setVideosLikedList(likedvideos)}); 
+  }, [userid]);
+  
   return (
     <div ref={videoContainerRef} className='reelplayer_frame shadow h-[560px] overflow-scroll snap-y snap-mandatory scroll-smooth bg-neutral-900 ' style={{ aspectRatio:"9/16"}}>
       {
-        videosList.map((video, ind) => <Video key={videoIds[ind].guid} videoid={videoIds[ind].guid} video={video} userid={userid} active={activeVideo === ind} />)
+        videosList.map((video, ind) => <Video key={videoIds[ind].guid} videoid={videoIds[ind].guid} video={video} userid={userid} videosLikedList={videosLikedList} active={activeVideo === ind} />)
       }
     </div>
   )

@@ -9,7 +9,7 @@ const updateLikes = async (liked,videoid,userid) => {
         console.log("hello running like",data, error);
         if(error) throw new Error("inserting video error");
         else {
-            let { liked, likedError } = await supabase.rpc('unlike_video', {userid,video_id:videoid});
+            let { liked, likedError } = await supabase.rpc('dislike_video', {userid,video_id:videoid});
             console.log("liking running like",liked, likedError);
             if(likedError) throw new Error("inserting video error");
         }
