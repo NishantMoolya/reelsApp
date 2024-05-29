@@ -41,9 +41,9 @@ const Video = ({ video, active, videoid, userid, likes, username, videosLikedLis
     }
 
     return (
-        <div className='w-full h-full snap-start relative'>
+        <div className='w-full h-full snap-start relative' onDoubleClick={handleLikes}>
             {/* video */}
-            <video ref={videoRef} onClick={playVideo} className='w-full h-full object-fill z-10 relative' src={video.url} onTimeUpdate={handleTimeLineProgress} loop muted></video>
+            <video ref={videoRef} onClick={playVideo} className='w-full h-full object-fill z-10 relative' src={video.url} onTimeUpdate={handleTimeLineProgress} loop></video>
             {/* video elements container */}
             <div className='absolute top-0 bottom-0 right-0 left-0 bg-transparent text-white'>
                 {/* dropdown box */}
